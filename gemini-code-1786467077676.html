@@ -20,14 +20,24 @@ html, body {
   position: relative;
   top: 20px;
   left: 20px;
+
   display: inline-flex;
   align-items: center;
   gap: 12px;
+
   padding: 8px 20px 8px 12px;
 
   background:
-    radial-gradient(circle, rgba(255,255,255,0.18) 1.5px, transparent 1.6px) 0 0/10px 10px,
-    linear-gradient(135deg, #C41E1E 0%, #8f1414 100%);
+    radial-gradient(
+      circle,
+      rgba(255,255,255,0.18) 1.5px,
+      transparent 1.6px
+    ) 0 0/10px 10px,
+    linear-gradient(
+      135deg,
+      #C41E1E 0%,
+      #8f1414 100%
+    );
 
   border: 3px solid #111;
   border-radius: 8px;
@@ -40,13 +50,21 @@ html, body {
   user-select: none;
 }
 
+
+/* ============================================
+   TOILES DÉCORATIVES
+============================================ */
+
 .compteur-boite::before,
 .compteur-boite::after {
   content: '';
   position: absolute;
+
   width: 46px;
   height: 46px;
+
   background-repeat: no-repeat;
+
   pointer-events: none;
   opacity: 0.55;
 }
@@ -69,6 +87,7 @@ html, body {
 .compteur-boite::after {
   bottom: -10px;
   right: 10px;
+
   transform: rotate(180deg);
 
   background-image: url("data:image/svg+xml;utf8,\
@@ -83,15 +102,21 @@ html, body {
 }
 
 
-/* LOGO SPIDER-MAN */
+/* ============================================
+   LOGO SPIDER-MAN
+============================================ */
+
 .compteur-icone {
   width: 50px;
   height: 50px;
 
   background-image: url('image_9cd85a.png');
 
-  /* Dernier réglage du cadrage */
-  background-size: 320%;
+  /*
+     Logo agrandi pour remplir davantage
+     le blanc à l'intérieur du cercle
+  */
+  background-size: 360%;
   background-position: center calc(50% + 15px);
   background-repeat: no-repeat;
 
@@ -103,11 +128,15 @@ html, body {
   box-sizing: border-box;
   flex-shrink: 0;
   z-index: 1;
+
   overflow: hidden;
 }
 
 
-/* TEXTE */
+/* ============================================
+   TEXTE
+============================================ */
+
 .compteur-texte {
   display: flex;
   flex-direction: column;
@@ -117,28 +146,41 @@ html, body {
 
 .compteur-label {
   font-family: 'Eater', cursive;
+
   font-size: 22px;
   letter-spacing: 2px;
   line-height: 1;
+
   color: #F5F5F0;
+
   -webkit-text-stroke: 1px #111;
+
   text-transform: uppercase;
+
   transform: rotate(1deg);
+
   margin-bottom: 2px;
 }
 
 .compteur-chiffre {
   font-family: 'Anton', sans-serif;
+
   font-size: 34px;
   line-height: 1;
+
   min-width: 26px;
+
   text-align: center;
+
   color: #F5F5F0;
+
   -webkit-text-stroke: 1.2px #111;
+
   text-shadow: 2px 2px 0 #1B3A8C;
 }
 </style>
 </head>
+
 
 <body>
 
@@ -147,42 +189,65 @@ html, body {
   <div class="compteur-icone"></div>
 
   <div class="compteur-texte">
-    <div class="compteur-label">Morts</div>
-    <div class="compteur-chiffre" id="chiffre">0</div>
+
+    <div class="compteur-label">
+      Morts
+    </div>
+
+    <div class="compteur-chiffre" id="chiffre">
+      0
+    </div>
+
   </div>
 
 </div>
 
+
 <script>
 const chiffreEl = document.getElementById('chiffre');
 
-let compte = parseInt(localStorage.getItem('compteurMorts')) || 0;
+let compte = parseInt(
+  localStorage.getItem('compteurMorts')
+) || 0;
 
 chiffreEl.textContent = compte;
 
+
+/* Sauvegarde */
 function sauvegarder() {
   localStorage.setItem('compteurMorts', compte);
   chiffreEl.textContent = compte;
 }
 
+
+/* +1 */
 function incrementer() {
   compte++;
   sauvegarder();
 }
 
+
+/* -1 */
 function decrementer() {
   if (compte > 0) {
     compte--;
   }
+
   sauvegarder();
 }
 
+
+/* Reset */
 function reset() {
   compte = 0;
   sauvegarder();
 }
 
-/* Clavier */
+
+/* ============================================
+   RACCOURCIS CLAVIER
+============================================ */
+
 document.addEventListener('keydown', (e) => {
 
   if (e.key === 'ArrowUp') {
@@ -199,14 +264,27 @@ document.addEventListener('keydown', (e) => {
 
 });
 
+
+/* ============================================
+   SOURIS
+============================================ */
+
 /* Clic gauche = +1 */
-document.getElementById('boite').addEventListener('click', incrementer);
+document
+  .getElementById('boite')
+  .addEventListener('click', incrementer);
+
 
 /* Clic droit = -1 */
-document.getElementById('boite').addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-  decrementer();
-});
+document
+  .getElementById('boite')
+  .addEventListener('contextmenu', (e) => {
+
+    e.preventDefault();
+
+    decrementer();
+
+  });
 </script>
 
 </body>
