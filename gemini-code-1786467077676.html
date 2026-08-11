@@ -3,325 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <title>Compteur de morts - Overlay Spider-Man</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Eater&family=Anton&display=swap" rel="stylesheet">
 
 <style>
-/* ============================================
-   ZONE TECHNIQUE — NE PAS TOUCHER
-============================================ */
-
 html, body {
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
-
-
-/* ============================================
-   ZONE PERSONNALISÉE — SPIDER-MAN
-============================================ */
 
 .compteur-boite {
-    position: relative;
-    top: 20px;
-    left: 20px;
+  position: relative;
+  top: 20px;
+  left: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px 8px 12px;
 
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.18) 1.5px, transparent 1.6px) 0 0/10px 10px,
+    linear-gradient(135deg, #C41E1E 0%, #8f1414 100%);
 
-    padding: 8px 20px 8px 12px;
+  border: 3px solid #111;
+  border-radius: 8px;
 
-    background:
-        radial-gradient(
-            circle,
-            rgba(255,255,255,0.18) 1.5px,
-            transparent 1.6px
-        ) 0 0 / 10px 10px,
-        linear-gradient(
-            135deg,
-            #C41E1E 0%,
-            #8f1414 100%
-        );
+  box-shadow:
+    0 0 0 2px #1B3A8C,
+    3px 3px 0 rgba(0,0,0,0.5);
 
-    border: 3px solid #111;
-    border-radius: 8px;
-
-    box-shadow:
-        0 0 0 2px #1B3A8C,
-        3px 3px 0 rgba(0,0,0,0.5);
-
-    transform: rotate(-1.5deg);
-
-    user-select: none;
-    cursor: pointer;
+  transform: rotate(-1.5deg);
+  user-select: none;
 }
 
-
-/* ============================================
-   TOILES D'ARAIGNÉE DANS LES COINS
-============================================ */
-
+/* Toile */
 .compteur-boite::before,
 .compteur-boite::after {
-    content: '';
-
-    position: absolute;
-
-    width: 46px;
-    height: 46px;
-
-    background-repeat: no-repeat;
-
-    pointer-events: none;
-    opacity: 0.55;
+  content: '';
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  opacity: 0.55;
 }
 
 .compteur-boite::before {
-    top: -10px;
-    left: 32px;
-
-    background-image: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
-<g fill='none' stroke='%23111' stroke-width='2.5'>\
-<path d='M0,0 Q30,10 20,40'/>\
-<path d='M0,0 Q15,25 35,25'/>\
-<path d='M0,0 Q40,5 45,35'/>\
-<path d='M20,40 Q25,20 35,25 Q42,15 45,35'/>\
-</g>\
-</svg>");
+  top: -10px;
+  left: 32px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='none' stroke='%23111' stroke-width='2.5'><path d='M0,0 Q30,10 20,40'/><path d='M0,0 Q15,25 35,25'/><path d='M0,0 Q40,5 45,35'/><path d='M20,40 Q25,20 35,25 Q42,15 45,35'/></g></svg>");
 }
 
 .compteur-boite::after {
-    bottom: -10px;
-    right: 10px;
-
-    transform: rotate(180deg);
-
-    background-image: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
-<g fill='none' stroke='%23111' stroke-width='2.5'>\
-<path d='M0,0 Q30,10 20,40'/>\
-<path d='M0,0 Q15,25 35,25'/>\
-<path d='M0,0 Q40,5 45,35'/>\
-<path d='M20,40 Q25,20 35,25 Q42,15 45,35'/>\
-</g>\
-</svg>");
+  bottom: -10px;
+  right: 10px;
+  transform: rotate(180deg);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='none' stroke='%23111' stroke-width='2.5'><path d='M0,0 Q30,10 20,40'/><path d='M0,0 Q15,25 35,25'/><path d='M0,0 Q40,5 45,35'/><path d='M20,40 Q25,20 35,25 Q42,15 45,35'/></g></svg>");
 }
 
-
-/* ============================================
-   LOGO SPIDER-MAN
-============================================ */
-
+/* LOGO SPIDER-MAN */
 .compteur-icone {
-    width: 50px;
-    height: 50px;
+  width: 50px;
+  height: 50px;
 
-    flex-shrink: 0;
+  background-image: url('image_9cd85a.png');
 
-    /* Image */
-    background-image: url("image_9cd85a.png");
+  /* Cadrage corrigé */
+  background-size: 300%;
+  background-position: center calc(50% + 6px);
+  background-repeat: no-repeat;
 
-    /*
-       IMPORTANT :
-       On centre maintenant l'image correctement.
-    */
-    background-size: 240%;
-    background-position: center center;
-    background-repeat: no-repeat;
+  background-color: #F5F5F0;
+  border-radius: 50%;
+  border: 2px solid #111;
 
-    background-color: #F5F5F0;
-
-    border: 2px solid #111;
-    border-radius: 50%;
-
-    box-sizing: border-box;
-
-    z-index: 1;
-
-    overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  z-index: 1;
+  overflow: hidden;
 }
-
-
-/* ============================================
-   TEXTE
-============================================ */
 
 .compteur-texte {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
 }
-
-
-/* "MORTS" */
 
 .compteur-label {
-    font-family: 'Eater', cursive;
-
-    font-size: 22px;
-    letter-spacing: 2px;
-    line-height: 1;
-
-    color: #F5F5F0;
-
-    -webkit-text-stroke: 1px #111;
-
-    text-transform: uppercase;
-
-    transform: rotate(1deg);
-
-    margin-bottom: 2px;
+  font-family: 'Eater', cursive;
+  font-size: 22px;
+  letter-spacing: 2px;
+  line-height: 1;
+  color: #F5F5F0;
+  -webkit-text-stroke: 1px #111;
+  text-transform: uppercase;
+  transform: rotate(1deg);
+  margin-bottom: 2px;
 }
 
-
-/* CHIFFRE */
-
 .compteur-chiffre {
-    font-family: 'Anton', sans-serif;
-
-    font-size: 34px;
-    line-height: 1;
-
-    min-width: 26px;
-
-    text-align: center;
-
-    color: #F5F5F0;
-
-    -webkit-text-stroke: 1.2px #111;
-
-    text-shadow:
-        2px 2px 0 #1B3A8C;
+  font-family: 'Anton', sans-serif;
+  font-size: 34px;
+  line-height: 1;
+  min-width: 26px;
+  text-align: center;
+  color: #F5F5F0;
+  -webkit-text-stroke: 1.2px #111;
+  text-shadow: 2px 2px 0 #1B3A8C;
 }
 </style>
 </head>
 
-
 <body>
 
 <div class="compteur-boite" id="boite">
+  <div class="compteur-icone"></div>
 
-    <div class="compteur-icone"></div>
-
-    <div class="compteur-texte">
-
-        <div class="compteur-label">
-            Morts
-        </div>
-
-        <div class="compteur-chiffre" id="chiffre">
-            0
-        </div>
-
-    </div>
-
+  <div class="compteur-texte">
+    <div class="compteur-label">Morts</div>
+    <div class="compteur-chiffre" id="chiffre">0</div>
+  </div>
 </div>
 
-
 <script>
-// ============================================
-// ZONE TECHNIQUE — LOGIQUE DU COMPTEUR
-// ============================================
-
 const chiffreEl = document.getElementById('chiffre');
-
-let compte = parseInt(
-    localStorage.getItem('compteurMorts')
-) || 0;
+let compte = parseInt(localStorage.getItem('compteurMorts')) || 0;
 
 chiffreEl.textContent = compte;
 
-
-// Sauvegarder le compteur
 function sauvegarder() {
-
-    localStorage.setItem(
-        'compteurMorts',
-        compte
-    );
-
-    chiffreEl.textContent = compte;
+  localStorage.setItem('compteurMorts', compte);
+  chiffreEl.textContent = compte;
 }
 
-
-// Ajouter une mort
 function incrementer() {
-
-    compte++;
-
-    sauvegarder();
+  compte++;
+  sauvegarder();
 }
 
-
-// Retirer une mort
 function decrementer() {
-
-    if (compte > 0) {
-        compte--;
-    }
-
-    sauvegarder();
+  if (compte > 0) compte--;
+  sauvegarder();
 }
 
-
-// Remettre à zéro
 function reset() {
-
-    compte = 0;
-
-    sauvegarder();
+  compte = 0;
+  sauvegarder();
 }
-
-
-// ============================================
-// RACCOURCIS CLAVIER
-// ============================================
 
 document.addEventListener('keydown', (e) => {
-
-    if (e.key === 'ArrowUp') {
-        incrementer();
-    }
-
-    if (e.key === 'ArrowDown') {
-        decrementer();
-    }
-
-    if (e.key.toLowerCase() === 'r') {
-        reset();
-    }
-
+  if (e.key === 'ArrowUp') incrementer();
+  if (e.key === 'ArrowDown') decrementer();
+  if (e.key.toLowerCase() === 'r') reset();
 });
 
+document.getElementById('boite').addEventListener('click', incrementer);
 
-// ============================================
-// CLIC GAUCHE = +1
-// CLIC DROIT = -1
-// ============================================
-
-document
-    .getElementById('boite')
-    .addEventListener('click', incrementer);
-
-
-document
-    .getElementById('boite')
-    .addEventListener('contextmenu', (e) => {
-
-        e.preventDefault();
-
-        decrementer();
-
-    });
-
+document.getElementById('boite').addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  decrementer();
+});
 </script>
 
 </body>
