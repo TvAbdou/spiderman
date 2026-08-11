@@ -91,9 +91,9 @@ html, body {
 
   background-image: url('image_9cd85a.png');
 
-  /* Logo légèrement plus gros + légèrement descendu */
+  /* Taille parfaite + logo légèrement descendu */
   background-size: 320%;
-  background-position: center calc(50% + 7px);
+  background-position: center calc(50% + 11px);
   background-repeat: no-repeat;
 
   background-color: #F5F5F0;
@@ -185,7 +185,6 @@ function reset() {
 
 /* Clavier */
 document.addEventListener('keydown', (e) => {
-
   if (e.key === 'ArrowUp') {
     incrementer();
   }
@@ -197,7 +196,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key.toLowerCase() === 'r') {
     reset();
   }
-
 });
 
 /* Clic gauche = +1 */
