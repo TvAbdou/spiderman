@@ -24,7 +24,7 @@ ZONE PERSONNALISÉE — SPIDER-MAN THEME
   position: relative;
   top: 20px;
   left: 20px;
-  display: inline-flex; /* CORRECTION : La boîte s'adapte au texte */
+  display: inline-flex; 
   align-items: center;
   gap: 12px;
   padding: 8px 20px 8px 12px;
@@ -67,11 +67,14 @@ ZONE PERSONNALISÉE — SPIDER-MAN THEME
 
 /* Intégration de l'image Spider-Man */
 .compteur-icone {
-  width: 45px;
-  height: 45px;
+  width: 50px; /* J'ai très légèrement agrandi le cercle pour que ça rende mieux */
+  height: 50px;
   /* NOM DE TON FICHIER IMAGE CI-DESSOUS */
   background-image: url('image_9cd85a.png'); 
-  background-size: cover;
+  
+  /* C'est ICI qu'on règle le problème : on force un gros zoom pour ignorer le blanc */
+  background-size: 350%; 
+  
   background-position: center;
   background-repeat: no-repeat;
   background-color: #F5F5F0;
