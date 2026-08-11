@@ -65,13 +65,18 @@ ZONE PERSONNALISÉE — SPIDER-MAN THEME
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='none' stroke='%23111' stroke-width='2.5'><path d='M0,0 Q30,10 20,40'/><path d='M0,0 Q15,25 35,25'/><path d='M0,0 Q40,5 45,35'/><path d='M20,40 Q25,20 35,25 Q42,15 45,35'/></g></svg>");
 }
 
-/* Intégration de l'image Spider-Man avec centrage corrigé */
+/* Intégration de l'image Spider-Man */
 .compteur-icone {
   width: 50px; 
   height: 50px;
   background-image: url('image_9cd85a.png'); 
-  background-size: 350%; 
-  background-position: 50% 70%; /* Centrage ajusté pour descendre la tête */
+  
+  /* Zoom ajusté pour garder les bords noirs intacts */
+  background-size: 280%; 
+  
+  /* On diminue le % pour faire DESCENDRE l'image */
+  background-position: 50% 40%; 
+  
   background-repeat: no-repeat;
   background-color: #F5F5F0;
   border-radius: 50%;
@@ -149,7 +154,7 @@ function reset() {
   sauvegarder();
 }
 
-// Raccourcis clavier (fonctionne si la fenêtre a le focus) :
+// Raccourcis clavier :
 document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowUp') incrementer();
   if (e.key === 'ArrowDown') decrementer();
