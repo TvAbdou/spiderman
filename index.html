@@ -9,17 +9,21 @@
 <style>
 html, body {
   margin: 0;
-  padding: 0;
+  padding: 30px;
   background: transparent;
-  overflow: hidden;
+  overflow: visible;
   width: 100%;
   height: 100%;
 }
 
+.compteur-fil-wrap {
+  position: relative;
+  display: inline-block;
+}
+
 .compteur-boite {
   position: relative;
-  top: 20px;
-  left: 20px;
+  z-index: 1;
 
   display: inline-flex;
   align-items: center;
@@ -48,57 +52,32 @@ html, body {
 
   transform: rotate(-1.5deg);
   user-select: none;
+  cursor: pointer;
+
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-
-/* ============================================
-   TOILES DÉCORATIVES
-============================================ */
-
-.compteur-boite::before,
-.compteur-boite::after {
-  content: '';
-  position: absolute;
-
-  width: 46px;
-  height: 46px;
-
-  background-repeat: no-repeat;
-
-  pointer-events: none;
-  opacity: 0.55;
+/* Feedback visuel au clic (+1 = flash blanc, -1 = flash bleu) */
+.compteur-boite.flash-plus {
+  box-shadow:
+    0 0 0 2px #F5F5F0,
+    0 0 18px 4px rgba(245, 245, 240, 0.8),
+    3px 3px 0 rgba(0,0,0,0.5);
 }
 
-.compteur-boite::before {
-  top: -10px;
-  left: 32px;
-
-  background-image: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
-<g fill='none' stroke='%23111' stroke-width='2.5'>\
-<path d='M0,0 Q30,10 20,40'/>\
-<path d='M0,0 Q15,25 35,25'/>\
-<path d='M0,0 Q40,5 45,35'/>\
-<path d='M20,40 Q25,20 35,25 Q42,15 45,35'/>\
-</g>\
-</svg>");
+.compteur-boite.flash-moins {
+  box-shadow:
+    0 0 0 2px #3498db,
+    0 0 18px 4px rgba(52, 152, 219, 0.7),
+    3px 3px 0 rgba(0,0,0,0.5);
 }
 
-.compteur-boite::after {
-  bottom: -10px;
-  right: 10px;
-
-  transform: rotate(180deg);
-
-  background-image: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
-<g fill='none' stroke='%23111' stroke-width='2.5'>\
-<path d='M0,0 Q30,10 20,40'/>\
-<path d='M0,0 Q15,25 35,25'/>\
-<path d='M0,0 Q40,5 45,35'/>\
-<path d='M20,40 Q25,20 35,25 Q42,15 45,35'/>\
-</g>\
-</svg>");
+/* Feedback visuel pendant l'appui long sur R (reset) */
+.compteur-boite.reset-pending {
+  box-shadow:
+    0 0 0 2px #f1c40f,
+    0 0 20px 6px rgba(241, 196, 15, 0.8),
+    3px 3px 0 rgba(0,0,0,0.5);
 }
 
 
@@ -111,11 +90,6 @@ html, body {
   height: 50px;
 
   background-image: url('image_9cd85a.png');
-
-  /*
-     Logo agrandi pour remplir davantage
-     le blanc à l'intérieur du cercle
-  */
   background-size: 360%;
   background-position: center calc(50% + 15px);
   background-repeat: no-repeat;
@@ -130,6 +104,27 @@ html, body {
   z-index: 1;
 
   overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: 'Anton', sans-serif;
+  font-size: 22px;
+  color: #C41E1E;
+}
+
+/* Fallback affiché si l'image ne charge pas (masqué par défaut) */
+.compteur-icone .icone-fallback {
+  display: none;
+}
+
+.compteur-icone.image-manquante {
+  background-image: none;
+}
+
+.compteur-icone.image-manquante .icone-fallback {
+  display: block;
 }
 
 
@@ -177,6 +172,45 @@ html, body {
   -webkit-text-stroke: 1.2px #111;
 
   text-shadow: 2px 2px 0 #1B3A8C;
+
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+/* Animation "pop" quand le chiffre change */
+.compteur-chiffre.pop {
+  transform: scale(1.35);
+}
+
+
+/* ============================================
+   POW BLANC AU CLIC
+============================================ */
+
+.pow-pop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.pow-pop.jouer {
+  animation: pow-anim 0.4s cubic-bezier(.2,1.4,.4,1) forwards;
+}
+
+@keyframes pow-anim {
+  0%   { transform: translate(-50%, -50%) scale(0.2) rotate(-8deg); opacity: 0; }
+  25%  { opacity: 1; }
+  60%  { transform: translate(-50%, -50%) scale(1.1) rotate(3deg); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1.3) rotate(5deg); opacity: 0; }
+}
+
+.pow-pop svg {
+  width: 80px;
+  height: 80px;
 }
 </style>
 </head>
@@ -184,9 +218,13 @@ html, body {
 
 <body>
 
-<div class="compteur-boite" id="boite">
+<div class="compteur-fil-wrap">
 
-  <div class="compteur-icone"></div>
+  <div class="compteur-boite" id="boite">
+
+  <div class="compteur-icone" id="icone">
+    <span class="icone-fallback">🕸️</span>
+  </div>
 
   <div class="compteur-texte">
 
@@ -200,47 +238,118 @@ html, body {
 
   </div>
 
+  <!-- Explosion POW blanche au clic -->
+  <div class="pow-pop" id="powPop">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="50,2 61,30 90,20 68,42 98,50 68,58 90,80 61,70 50,98 39,70 10,80 32,58 2,50 32,42 10,20 39,30"
+        fill="#F5F5F0" stroke="#111" stroke-width="3"/>
+    </svg>
+  </div>
+
+  </div>
+
 </div>
 
 
 <script>
-const chiffreEl = document.getElementById('chiffre');
 
-let compte = parseInt(
-  localStorage.getItem('compteurMorts')
-) || 0;
+/* ============================================
+   FALLBACK IMAGE LOGO
+============================================ */
+const icone = document.getElementById('icone');
+const testImg = new Image();
+testImg.onerror = () => icone.classList.add('image-manquante');
+testImg.src = 'image_9cd85a.png';
+
+
+/* ============================================
+   ETAT + PERSISTANCE
+============================================ */
+const chiffreEl = document.getElementById('chiffre');
+const boiteEl = document.getElementById('boite');
+const STOCKAGE_KEY = 'compteurMorts';
+
+let compte = 0;
+
+try {
+  compte = parseInt(localStorage.getItem(STOCKAGE_KEY)) || 0;
+} catch (e) {
+  // localStorage indisponible (ex: certains navigateurs sources OBS) -> on reste en mémoire
+  console.warn('localStorage indisponible, le compteur ne persistera pas entre les sessions.');
+}
 
 chiffreEl.textContent = compte;
 
 
-/* Sauvegarde */
 function sauvegarder() {
-  localStorage.setItem('compteurMorts', compte);
+  try {
+    localStorage.setItem(STOCKAGE_KEY, compte);
+  } catch (e) {
+    // silencieux : on continue en mémoire seulement
+  }
   chiffreEl.textContent = compte;
+
+  chiffreEl.classList.remove('pop');
+  void chiffreEl.offsetWidth; // force le reflow pour rejouer l'animation
+  chiffreEl.classList.add('pop');
 }
 
+function flash(classe) {
+  boiteEl.classList.remove('flash-plus', 'flash-moins');
+  boiteEl.classList.add(classe);
+  setTimeout(() => boiteEl.classList.remove(classe), 200);
+}
 
-/* +1 */
+const powEl = document.getElementById('powPop');
+
+function jouerPow() {
+  powEl.classList.remove('jouer');
+  void powEl.offsetWidth; // force le reflow pour rejouer l'animation
+  powEl.classList.add('jouer');
+}
+
 function incrementer() {
   compte++;
   sauvegarder();
+  flash('flash-plus');
+  jouerPow();
 }
 
-
-/* -1 */
 function decrementer() {
   if (compte > 0) {
     compte--;
   }
+  sauvegarder();
+  flash('flash-moins');
+}
 
+function reset() {
+  compte = 0;
   sauvegarder();
 }
 
 
-/* Reset */
-function reset() {
-  compte = 0;
-  sauvegarder();
+/* ============================================
+   RESET SECURISE : maintenir "R" 1 seconde
+============================================ */
+let resetTimer = null;
+
+function demarrerReset() {
+  if (resetTimer) return;
+  boiteEl.classList.add('reset-pending');
+  resetTimer = setTimeout(() => {
+    reset();
+    boiteEl.classList.remove('reset-pending');
+    resetTimer = null;
+  }, 1000);
+}
+
+function annulerReset() {
+  if (resetTimer) {
+    clearTimeout(resetTimer);
+    resetTimer = null;
+  }
+  boiteEl.classList.remove('reset-pending');
 }
 
 
@@ -249,7 +358,6 @@ function reset() {
 ============================================ */
 
 document.addEventListener('keydown', (e) => {
-
   if (e.key === 'ArrowUp') {
     incrementer();
   }
@@ -258,10 +366,15 @@ document.addEventListener('keydown', (e) => {
     decrementer();
   }
 
-  if (e.key.toLowerCase() === 'r') {
-    reset();
+  if (e.key.toLowerCase() === 'r' && !e.repeat) {
+    demarrerReset();
   }
+});
 
+document.addEventListener('keyup', (e) => {
+  if (e.key.toLowerCase() === 'r') {
+    annulerReset();
+  }
 });
 
 
@@ -269,22 +382,12 @@ document.addEventListener('keydown', (e) => {
    SOURIS
 ============================================ */
 
-/* Clic gauche = +1 */
-document
-  .getElementById('boite')
-  .addEventListener('click', incrementer);
+boiteEl.addEventListener('click', incrementer);
 
-
-/* Clic droit = -1 */
-document
-  .getElementById('boite')
-  .addEventListener('contextmenu', (e) => {
-
-    e.preventDefault();
-
-    decrementer();
-
-  });
+boiteEl.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  decrementer();
+});
 </script>
 
 </body>
