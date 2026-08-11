@@ -65,17 +65,13 @@ ZONE PERSONNALISÉE — SPIDER-MAN THEME
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='none' stroke='%23111' stroke-width='2.5'><path d='M0,0 Q30,10 20,40'/><path d='M0,0 Q15,25 35,25'/><path d='M0,0 Q40,5 45,35'/><path d='M20,40 Q25,20 35,25 Q42,15 45,35'/></g></svg>");
 }
 
-/* Intégration de l'image Spider-Man */
+/* Intégration de l'image Spider-Man avec centrage corrigé */
 .compteur-icone {
-  width: 50px; /* J'ai très légèrement agrandi le cercle pour que ça rende mieux */
+  width: 50px; 
   height: 50px;
-  /* NOM DE TON FICHIER IMAGE CI-DESSOUS */
   background-image: url('image_9cd85a.png'); 
-  
-  /* C'est ICI qu'on règle le problème : on force un gros zoom pour ignorer le blanc */
   background-size: 350%; 
-  
-  background-position: center;
+  background-position: 50% 70%; /* Centrage ajusté pour descendre la tête */
   background-repeat: no-repeat;
   background-color: #F5F5F0;
   border-radius: 50%;
