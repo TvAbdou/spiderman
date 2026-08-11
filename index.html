@@ -9,7 +9,7 @@
 <style>
 html, body {
   margin: 0;
-  padding: 30px;
+  padding: 0;
   background: transparent;
   overflow: visible;
   width: 100%;
@@ -19,11 +19,89 @@ html, body {
 .compteur-fil-wrap {
   position: relative;
   display: inline-block;
+  padding: 25px;
 }
+
+/* ============================================
+   TOILES D'ARAIGNÉE
+============================================ */
+
+.toile {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.32;
+}
+
+.toile-haut {
+  top: -8px;
+  left: -8px;
+}
+
+.toile-bas {
+  right: -8px;
+  bottom: -8px;
+  transform: rotate(180deg);
+}
+
+.toile svg {
+  width: 100%;
+  height: 100%;
+}
+
+.toile path {
+  fill: none;
+  stroke: #F5F5F0;
+  stroke-width: 1.4;
+}
+
+/* ============================================
+   PETITS FILS QUI SORTENT DU CADRE
+============================================ */
+
+.fil {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+.fil-1 {
+  width: 55px;
+  height: 2px;
+  background: #F5F5F0;
+  right: -30px;
+  top: 8px;
+  transform: rotate(-25deg);
+}
+
+.fil-2 {
+  width: 42px;
+  height: 2px;
+  background: #F5F5F0;
+  left: -25px;
+  bottom: 12px;
+  transform: rotate(-25deg);
+}
+
+.fil-3 {
+  width: 32px;
+  height: 2px;
+  background: #F5F5F0;
+  right: -20px;
+  bottom: 18px;
+  transform: rotate(35deg);
+}
+
+/* ============================================
+   COMPTEUR
+============================================ */
 
 .compteur-boite {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 
   display: inline-flex;
   align-items: center;
@@ -34,9 +112,10 @@ html, body {
   background:
     radial-gradient(
       circle,
-      rgba(255,255,255,0.18) 1.5px,
-      transparent 1.6px
-    ) 0 0/10px 10px,
+      rgba(255,255,255,0.15) 1.5px,
+      transparent 1.7px
+    ) 0 0 / 10px 10px,
+
     linear-gradient(
       135deg,
       #C41E1E 0%,
@@ -51,35 +130,33 @@ html, body {
     3px 3px 0 rgba(0,0,0,0.5);
 
   transform: rotate(-1.5deg);
+
   user-select: none;
   cursor: pointer;
 
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
-/* Feedback visuel au clic (+1 = flash blanc, -1 = flash bleu) */
-.compteur-boite.flash-plus {
-  box-shadow:
-    0 0 0 2px #F5F5F0,
-    0 0 18px 4px rgba(245, 245, 240, 0.8),
-    3px 3px 0 rgba(0,0,0,0.5);
-}
+/* Petite texture comics */
+.compteur-boite::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 
-.compteur-boite.flash-moins {
-  box-shadow:
-    0 0 0 2px #3498db,
-    0 0 18px 4px rgba(52, 152, 219, 0.7),
-    3px 3px 0 rgba(0,0,0,0.5);
-}
+  background:
+    repeating-linear-gradient(
+      -12deg,
+      transparent 0,
+      transparent 11px,
+      rgba(0,0,0,0.035) 12px,
+      transparent 13px
+    );
 
-/* Feedback visuel pendant l'appui long sur R (reset) */
-.compteur-boite.reset-pending {
-  box-shadow:
-    0 0 0 2px #f1c40f,
-    0 0 20px 6px rgba(241, 196, 15, 0.8),
-    3px 3px 0 rgba(0,0,0,0.5);
+  border-radius: 5px;
+  pointer-events: none;
 }
-
 
 /* ============================================
    LOGO SPIDER-MAN
@@ -101,7 +178,6 @@ html, body {
 
   box-sizing: border-box;
   flex-shrink: 0;
-  z-index: 1;
 
   overflow: hidden;
 
@@ -112,9 +188,10 @@ html, body {
   font-family: 'Anton', sans-serif;
   font-size: 22px;
   color: #C41E1E;
+
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.4);
 }
 
-/* Fallback affiché si l'image ne charge pas (masqué par défaut) */
 .compteur-icone .icone-fallback {
   display: none;
 }
@@ -126,7 +203,6 @@ html, body {
 .compteur-icone.image-manquante .icone-fallback {
   display: block;
 }
-
 
 /* ============================================
    TEXTE
@@ -155,6 +231,8 @@ html, body {
   transform: rotate(1deg);
 
   margin-bottom: 2px;
+
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.35);
 }
 
 .compteur-chiffre {
@@ -174,38 +252,103 @@ html, body {
   text-shadow: 2px 2px 0 #1B3A8C;
 
   display: inline-block;
+
   transition: transform 0.15s ease;
 }
 
-/* Animation "pop" quand le chiffre change */
 .compteur-chiffre.pop {
   transform: scale(1.35);
 }
 
+/* ============================================
+   FLASH +1
+============================================ */
+
+.compteur-boite.flash-plus {
+  box-shadow:
+    0 0 0 2px #F5F5F0,
+    0 0 18px 4px rgba(245,245,240,0.8),
+    3px 3px 0 rgba(0,0,0,0.5);
+}
 
 /* ============================================
-   POW BLANC AU CLIC
+   FLASH -1
+============================================ */
+
+.compteur-boite.flash-moins {
+  box-shadow:
+    0 0 0 2px #3498db,
+    0 0 18px 4px rgba(52,152,219,0.7),
+    3px 3px 0 rgba(0,0,0,0.5);
+}
+
+/* ============================================
+   RESET
+============================================ */
+
+.compteur-boite.reset-pending {
+  box-shadow:
+    0 0 0 2px #f1c40f,
+    0 0 20px 6px rgba(241,196,15,0.8),
+    3px 3px 0 rgba(0,0,0,0.5);
+}
+
+/* ============================================
+   POW BLANC
 ============================================ */
 
 .pow-pop {
   position: absolute;
+
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0);
+
+  transform:
+    translate(-50%, -50%)
+    scale(0);
+
   z-index: 3;
+
   pointer-events: none;
   opacity: 0;
 }
 
 .pow-pop.jouer {
-  animation: pow-anim 0.4s cubic-bezier(.2,1.4,.4,1) forwards;
+  animation:
+    pow-anim
+    0.4s
+    cubic-bezier(.2,1.4,.4,1)
+    forwards;
 }
 
 @keyframes pow-anim {
-  0%   { transform: translate(-50%, -50%) scale(0.2) rotate(-8deg); opacity: 0; }
-  25%  { opacity: 1; }
-  60%  { transform: translate(-50%, -50%) scale(1.1) rotate(3deg); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1.3) rotate(5deg); opacity: 0; }
+  0% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.2)
+      rotate(-8deg);
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  60% {
+    transform:
+      translate(-50%, -50%)
+      scale(1.1)
+      rotate(3deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      translate(-50%, -50%)
+      scale(1.3)
+      rotate(5deg);
+    opacity: 0;
+  }
 }
 
 .pow-pop svg {
@@ -215,179 +358,325 @@ html, body {
 </style>
 </head>
 
-
 <body>
 
 <div class="compteur-fil-wrap">
 
-  <div class="compteur-boite" id="boite">
-
-  <div class="compteur-icone" id="icone">
-    <span class="icone-fallback">🕸️</span>
-  </div>
-
-  <div class="compteur-texte">
-
-    <div class="compteur-label">
-      Morts
-    </div>
-
-    <div class="compteur-chiffre" id="chiffre">
-      0
-    </div>
-
-  </div>
-
-  <!-- Explosion POW blanche au clic -->
-  <div class="pow-pop" id="powPop">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="50,2 61,30 90,20 68,42 98,50 68,58 90,80 61,70 50,98 39,70 10,80 32,58 2,50 32,42 10,20 39,30"
-        fill="#F5F5F0" stroke="#111" stroke-width="3"/>
+  <!-- Toile haut gauche -->
+  <div class="toile toile-haut">
+    <svg viewBox="0 0 100 100">
+      <path d="M0 0 L100 100" />
+      <path d="M20 0 L100 80" />
+      <path d="M0 20 L80 100" />
+      <path d="M0 0 Q35 5 70 30 T100 100" />
+      <path d="M0 0 Q5 35 30 70 T100 100" />
+      <path d="M0 20 Q30 25 55 50 T100 100" />
     </svg>
   </div>
 
+  <!-- Toile bas droite -->
+  <div class="toile toile-bas">
+    <svg viewBox="0 0 100 100">
+      <path d="M0 0 L100 100" />
+      <path d="M20 0 L100 80" />
+      <path d="M0 20 L80 100" />
+      <path d="M0 0 Q35 5 70 30 T100 100" />
+      <path d="M0 0 Q5 35 30 70 T100 100" />
+      <path d="M0 20 Q30 25 55 50 T100 100" />
+    </svg>
   </div>
 
-</div>
+  <!-- Fils qui dépassent -->
+  <div class="fil fil-1"></div>
+  <div class="fil fil-2"></div>
+  <div class="fil fil-3"></div>
 
+  <!-- COMPTEUR -->
+  <div class="compteur-boite" id="boite">
+
+    <div class="compteur-icone" id="icone">
+      <span class="icone-fallback">🕸️</span>
+    </div>
+
+    <div class="compteur-texte">
+
+      <div class="compteur-label">
+        Morts
+      </div>
+
+      <div class="compteur-chiffre" id="chiffre">
+        0
+      </div>
+
+    </div>
+
+    <!-- Explosion POW -->
+    <div class="pow-pop" id="powPop">
+      <svg
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg">
+
+        <polygon
+          points="50,2 61,30 90,20 68,42 98,50 68,58 90,80 61,70 50,98 39,70 10,80 32,58 2,50 32,42 10,20 39,30"
+          fill="#F5F5F0"
+          stroke="#111"
+          stroke-width="3"
+        />
+      </svg>
+    </div>
+
+  </div>
+</div>
 
 <script>
 
 /* ============================================
    FALLBACK IMAGE LOGO
 ============================================ */
+
 const icone = document.getElementById('icone');
+
 const testImg = new Image();
-testImg.onerror = () => icone.classList.add('image-manquante');
+
+testImg.onerror = () => {
+  icone.classList.add('image-manquante');
+};
+
 testImg.src = 'image_9cd85a.png';
 
 
 /* ============================================
    ETAT + PERSISTANCE
 ============================================ */
+
 const chiffreEl = document.getElementById('chiffre');
 const boiteEl = document.getElementById('boite');
+
 const STOCKAGE_KEY = 'compteurMorts';
 
 let compte = 0;
 
 try {
-  compte = parseInt(localStorage.getItem(STOCKAGE_KEY)) || 0;
+  compte = parseInt(
+    localStorage.getItem(STOCKAGE_KEY)
+  ) || 0;
 } catch (e) {
-  // localStorage indisponible (ex: certains navigateurs sources OBS) -> on reste en mémoire
-  console.warn('localStorage indisponible, le compteur ne persistera pas entre les sessions.');
+  console.warn(
+    'localStorage indisponible.'
+  );
 }
 
 chiffreEl.textContent = compte;
 
 
+/* ============================================
+   SAUVEGARDE
+============================================ */
+
 function sauvegarder() {
+
   try {
-    localStorage.setItem(STOCKAGE_KEY, compte);
+    localStorage.setItem(
+      STOCKAGE_KEY,
+      compte
+    );
   } catch (e) {
-    // silencieux : on continue en mémoire seulement
+    // Mémoire uniquement si localStorage indisponible.
   }
+
   chiffreEl.textContent = compte;
 
   chiffreEl.classList.remove('pop');
-  void chiffreEl.offsetWidth; // force le reflow pour rejouer l'animation
+
+  void chiffreEl.offsetWidth;
+
   chiffreEl.classList.add('pop');
 }
 
+
+/* ============================================
+   FLASH
+============================================ */
+
 function flash(classe) {
-  boiteEl.classList.remove('flash-plus', 'flash-moins');
+
+  boiteEl.classList.remove(
+    'flash-plus',
+    'flash-moins'
+  );
+
   boiteEl.classList.add(classe);
-  setTimeout(() => boiteEl.classList.remove(classe), 200);
+
+  setTimeout(() => {
+    boiteEl.classList.remove(classe);
+  }, 200);
 }
+
+
+/* ============================================
+   POW
+============================================ */
 
 const powEl = document.getElementById('powPop');
 
 function jouerPow() {
+
   powEl.classList.remove('jouer');
-  void powEl.offsetWidth; // force le reflow pour rejouer l'animation
+
+  void powEl.offsetWidth;
+
   powEl.classList.add('jouer');
 }
 
+
+/* ============================================
+   +1
+============================================ */
+
 function incrementer() {
+
   compte++;
+
   sauvegarder();
+
   flash('flash-plus');
+
   jouerPow();
 }
 
+
+/* ============================================
+   -1
+============================================ */
+
 function decrementer() {
+
   if (compte > 0) {
     compte--;
   }
+
   sauvegarder();
+
   flash('flash-moins');
 }
 
+
+/* ============================================
+   RESET
+============================================ */
+
 function reset() {
+
   compte = 0;
+
   sauvegarder();
 }
 
 
 /* ============================================
-   RESET SECURISE : maintenir "R" 1 seconde
+   RESET AVEC R MAINTENU 1 SECONDE
 ============================================ */
+
 let resetTimer = null;
 
 function demarrerReset() {
+
   if (resetTimer) return;
-  boiteEl.classList.add('reset-pending');
+
+  boiteEl.classList.add(
+    'reset-pending'
+  );
+
   resetTimer = setTimeout(() => {
+
     reset();
-    boiteEl.classList.remove('reset-pending');
+
+    boiteEl.classList.remove(
+      'reset-pending'
+    );
+
     resetTimer = null;
+
   }, 1000);
 }
 
+
 function annulerReset() {
+
   if (resetTimer) {
+
     clearTimeout(resetTimer);
+
     resetTimer = null;
   }
-  boiteEl.classList.remove('reset-pending');
+
+  boiteEl.classList.remove(
+    'reset-pending'
+  );
 }
 
 
 /* ============================================
-   RACCOURCIS CLAVIER
+   CLAVIER
 ============================================ */
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowUp') {
-    incrementer();
-  }
+document.addEventListener(
+  'keydown',
+  (e) => {
 
-  if (e.key === 'ArrowDown') {
-    decrementer();
-  }
+    if (e.key === 'ArrowUp') {
+      incrementer();
+    }
 
-  if (e.key.toLowerCase() === 'r' && !e.repeat) {
-    demarrerReset();
-  }
-});
+    if (e.key === 'ArrowDown') {
+      decrementer();
+    }
 
-document.addEventListener('keyup', (e) => {
-  if (e.key.toLowerCase() === 'r') {
-    annulerReset();
+    if (
+      e.key.toLowerCase() === 'r'
+      && !e.repeat
+    ) {
+      demarrerReset();
+    }
+
   }
-});
+);
+
+
+document.addEventListener(
+  'keyup',
+  (e) => {
+
+    if (
+      e.key.toLowerCase() === 'r'
+    ) {
+      annulerReset();
+    }
+
+  }
+);
 
 
 /* ============================================
    SOURIS
 ============================================ */
 
-boiteEl.addEventListener('click', incrementer);
+boiteEl.addEventListener(
+  'click',
+  incrementer
+);
 
-boiteEl.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-  decrementer();
-});
+boiteEl.addEventListener(
+  'contextmenu',
+  (e) => {
+
+    e.preventDefault();
+
+    decrementer();
+
+  }
+);
+
 </script>
 
 </body>
