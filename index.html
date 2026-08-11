@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,9 +8,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Eater&family=Anton&display=swap" rel="stylesheet">
 
 <style>
+
+/* ============================================
+   BASE
+============================================ */
+
 html, body {
   margin: 0;
-  padding: 30px;
+  padding: 0;
   background: transparent;
   overflow: visible;
   width: 100%;
@@ -19,7 +25,72 @@ html, body {
 .compteur-fil-wrap {
   position: relative;
   display: inline-block;
+  padding: 28px;
 }
+
+
+/* ============================================
+   FILS D'ARAIGNÉE EXTÉRIEURS
+============================================ */
+
+.compteur-fil-wrap::before,
+.compteur-fil-wrap::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Toile en haut à gauche */
+.compteur-fil-wrap::before {
+  width: 75px;
+  height: 75px;
+  top: -5px;
+  left: -5px;
+
+  background:
+    radial-gradient(
+      circle at 100% 100%,
+      transparent 0 24px,
+      rgba(245,245,240,0.28) 25px 26px,
+      transparent 27px 38px,
+      rgba(245,245,240,0.22) 39px 40px,
+      transparent 41px 52px,
+      rgba(245,245,240,0.18) 53px 54px,
+      transparent 55px
+    );
+
+  border-radius: 0 0 100% 0;
+  transform: rotate(-18deg);
+}
+
+/* Toile en bas à droite */
+.compteur-fil-wrap::after {
+  width: 70px;
+  height: 70px;
+  right: -5px;
+  bottom: -5px;
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      transparent 0 22px,
+      rgba(245,245,240,0.26) 23px 24px,
+      transparent 25px 36px,
+      rgba(245,245,240,0.20) 37px 38px,
+      transparent 39px 50px,
+      rgba(245,245,240,0.16) 51px 52px,
+      transparent 53px
+    );
+
+  border-radius: 100% 0 0 0;
+  transform: rotate(18deg);
+}
+
+
+/* ============================================
+   COMPTEUR
+============================================ */
 
 .compteur-boite {
   position: relative;
@@ -32,11 +103,23 @@ html, body {
   padding: 8px 20px 8px 12px;
 
   background:
+    /* Texture comics */
     radial-gradient(
       circle,
-      rgba(255,255,255,0.18) 1.5px,
-      transparent 1.6px
-    ) 0 0/10px 10px,
+      rgba(255,255,255,0.18) 1.4px,
+      transparent 1.7px
+    ) 0 0 / 10px 10px,
+
+    /* Petites imperfections */
+    repeating-linear-gradient(
+      -12deg,
+      transparent 0px,
+      transparent 8px,
+      rgba(0,0,0,0.055) 9px,
+      transparent 10px
+    ),
+
+    /* Fond rouge */
     linear-gradient(
       135deg,
       #C41E1E 0%,
@@ -51,33 +134,157 @@ html, body {
     3px 3px 0 rgba(0,0,0,0.5);
 
   transform: rotate(-1.5deg);
+
   user-select: none;
   cursor: pointer;
 
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
-/* Feedback visuel au clic (+1 = flash blanc, -1 = flash bleu) */
-.compteur-boite.flash-plus {
-  box-shadow:
-    0 0 0 2px #F5F5F0,
-    0 0 18px 4px rgba(245, 245, 240, 0.8),
-    3px 3px 0 rgba(0,0,0,0.5);
+
+/* ============================================
+   PETITS FILS QUI SORTENT DU COMPTEUR
+============================================ */
+
+.compteur-boite::before,
+.compteur-boite::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
 }
 
-.compteur-boite.flash-moins {
-  box-shadow:
-    0 0 0 2px #3498db,
-    0 0 18px 4px rgba(52, 152, 219, 0.7),
-    3px 3px 0 rgba(0,0,0,0.5);
+/* Fil supérieur droit */
+.compteur-boite::before {
+  width: 65px;
+  height: 35px;
+
+  right: -52px;
+  top: -18px;
+
+  border-top: 2px solid rgba(245,245,240,0.38);
+  border-right: 2px solid rgba(245,245,240,0.30);
+
+  border-radius: 0 100% 0 0;
+
+  transform: rotate(18deg);
 }
 
-/* Feedback visuel pendant l'appui long sur R (reset) */
-.compteur-boite.reset-pending {
-  box-shadow:
-    0 0 0 2px #f1c40f,
-    0 0 20px 6px rgba(241, 196, 15, 0.8),
-    3px 3px 0 rgba(0,0,0,0.5);
+/* Fil inférieur gauche */
+.compteur-boite::after {
+  width: 58px;
+  height: 32px;
+
+  left: -48px;
+  bottom: -16px;
+
+  border-left: 2px solid rgba(245,245,240,0.30);
+  border-bottom: 2px solid rgba(245,245,240,0.25);
+
+  border-radius: 0 0 0 100%;
+
+  transform: rotate(-15deg);
+}
+
+
+/* ============================================
+   ARAIGNÉE DÉCORATIVE
+============================================ */
+
+.araignee-deco {
+  position: absolute;
+
+  right: -19px;
+  top: -20px;
+
+  width: 30px;
+  height: 30px;
+
+  z-index: 4;
+
+  transform: rotate(12deg);
+  pointer-events: none;
+}
+
+/* Corps */
+.araignee-deco .corps {
+  position: absolute;
+
+  width: 9px;
+  height: 14px;
+
+  background: #111;
+  border-radius: 50%;
+
+  left: 11px;
+  top: 8px;
+}
+
+/* Tête */
+.araignee-deco .tete {
+  position: absolute;
+
+  width: 7px;
+  height: 7px;
+
+  background: #111;
+  border-radius: 50%;
+
+  left: 12px;
+  top: 3px;
+}
+
+/* Pattes */
+.araignee-deco i {
+  position: absolute;
+
+  width: 13px;
+  height: 2px;
+
+  background: #111;
+
+  transform-origin: right center;
+}
+
+.araignee-deco i:nth-child(3) {
+  left: 0;
+  top: 9px;
+  transform: rotate(25deg);
+}
+
+.araignee-deco i:nth-child(4) {
+  left: 0;
+  top: 14px;
+  transform: rotate(-5deg);
+}
+
+.araignee-deco i:nth-child(5) {
+  left: 1px;
+  top: 19px;
+  transform: rotate(-30deg);
+}
+
+.araignee-deco i:nth-child(6) {
+  left: 16px;
+  top: 9px;
+  transform: rotate(-25deg);
+  transform-origin: left center;
+}
+
+.araignee-deco i:nth-child(7) {
+  left: 16px;
+  top: 14px;
+  transform: rotate(5deg);
+  transform-origin: left center;
+}
+
+.araignee-deco i:nth-child(8) {
+  left: 15px;
+  top: 19px;
+  transform: rotate(30deg);
+  transform-origin: left center;
 }
 
 
@@ -112,9 +319,11 @@ html, body {
   font-family: 'Anton', sans-serif;
   font-size: 22px;
   color: #C41E1E;
+
+  box-shadow:
+    1px 1px 0 rgba(0,0,0,0.45);
 }
 
-/* Fallback affiché si l'image ne charge pas (masqué par défaut) */
 .compteur-icone .icone-fallback {
   display: none;
 }
@@ -155,6 +364,10 @@ html, body {
   transform: rotate(1deg);
 
   margin-bottom: 2px;
+
+  /* Petit effet d'impression */
+  text-shadow:
+    1px 1px 0 rgba(0,0,0,0.3);
 }
 
 .compteur-chiffre {
@@ -171,47 +384,216 @@ html, body {
 
   -webkit-text-stroke: 1.2px #111;
 
-  text-shadow: 2px 2px 0 #1B3A8C;
+  text-shadow:
+    2px 2px 0 #1B3A8C;
 
   display: inline-block;
+
   transition: transform 0.15s ease;
 }
 
-/* Animation "pop" quand le chiffre change */
 .compteur-chiffre.pop {
   transform: scale(1.35);
 }
 
 
 /* ============================================
-   POW BLANC AU CLIC
+   FLASH +1
+============================================ */
+
+.compteur-boite.flash-plus {
+  box-shadow:
+    0 0 0 2px #F5F5F0,
+    0 0 18px 4px rgba(245,245,240,0.8),
+    3px 3px 0 rgba(0,0,0,0.5);
+}
+
+
+/* ============================================
+   FLASH -1
+============================================ */
+
+.compteur-boite.flash-moins {
+  box-shadow:
+    0 0 0 2px #3498db,
+    0 0 18px 4px rgba(52,152,219,0.7),
+    3px 3px 0 rgba(0,0,0,0.5);
+}
+
+
+/* ============================================
+   RESET
+============================================ */
+
+.compteur-boite.reset-pending {
+  box-shadow:
+    0 0 0 2px #f1c40f,
+    0 0 20px 6px rgba(241,196,15,0.8),
+    3px 3px 0 rgba(0,0,0,0.5);
+}
+
+
+/* ============================================
+   POW BLANC
 ============================================ */
 
 .pow-pop {
   position: absolute;
+
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0);
+
+  transform:
+    translate(-50%, -50%)
+    scale(0);
+
   z-index: 3;
+
   pointer-events: none;
   opacity: 0;
 }
 
 .pow-pop.jouer {
-  animation: pow-anim 0.4s cubic-bezier(.2,1.4,.4,1) forwards;
+  animation:
+    pow-anim
+    0.4s
+    cubic-bezier(.2,1.4,.4,1)
+    forwards;
 }
 
 @keyframes pow-anim {
-  0%   { transform: translate(-50%, -50%) scale(0.2) rotate(-8deg); opacity: 0; }
-  25%  { opacity: 1; }
-  60%  { transform: translate(-50%, -50%) scale(1.1) rotate(3deg); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1.3) rotate(5deg); opacity: 0; }
+
+  0% {
+    transform:
+      translate(-50%, -50%)
+      scale(0.2)
+      rotate(-8deg);
+
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  60% {
+    transform:
+      translate(-50%, -50%)
+      scale(1.1)
+      rotate(3deg);
+
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      translate(-50%, -50%)
+      scale(1.3)
+      rotate(5deg);
+
+    opacity: 0;
+  }
 }
 
 .pow-pop svg {
   width: 80px;
   height: 80px;
 }
+
+
+/* ============================================
+   PETITS POINTS COMICS
+============================================ */
+
+.comic-points {
+  position: absolute;
+
+  left: -12px;
+  bottom: 4px;
+
+  width: 35px;
+  height: 25px;
+
+  z-index: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(17,17,17,0.55) 1.5px,
+      transparent 1.7px
+    );
+
+  background-size: 7px 7px;
+
+  transform: rotate(-8deg);
+  opacity: 0.65;
+}
+
+
+/* ============================================
+   FALLBACK TOILE SUPPLÉMENTAIRE
+============================================ */
+
+.web-line {
+  position: absolute;
+
+  width: 90px;
+  height: 90px;
+
+  pointer-events: none;
+
+  opacity: 0.32;
+
+  z-index: 0;
+}
+
+.web-line.top-right {
+  right: -52px;
+  top: -42px;
+}
+
+.web-line.bottom-left {
+  left: -48px;
+  bottom: -38px;
+}
+
+.web-line span {
+  position: absolute;
+
+  width: 100%;
+  height: 2px;
+
+  background: rgba(245,245,240,0.65);
+
+  transform-origin: left center;
+}
+
+.web-line.top-right span:nth-child(1) {
+  transform: rotate(25deg);
+}
+
+.web-line.top-right span:nth-child(2) {
+  transform: rotate(55deg);
+}
+
+.web-line.top-right span:nth-child(3) {
+  transform: rotate(85deg);
+}
+
+.web-line.bottom-left span:nth-child(1) {
+  transform: rotate(205deg);
+}
+
+.web-line.bottom-left span:nth-child(2) {
+  transform: rotate(235deg);
+}
+
+.web-line.bottom-left span:nth-child(3) {
+  transform: rotate(265deg);
+}
+
 </style>
 </head>
 
@@ -220,31 +602,93 @@ html, body {
 
 <div class="compteur-fil-wrap">
 
+  <!-- Petite araignée décorative -->
+  <div class="araignee-deco">
+    <span class="corps"></span>
+    <span class="tete"></span>
+
+    <i></i>
+    <i></i>
+    <i></i>
+    <i></i>
+    <i></i>
+    <i></i>
+  </div>
+
+
+  <!-- Petits points comics -->
+  <div class="comic-points"></div>
+
+
+  <!-- Toiles décoratives -->
+  <div class="web-line top-right">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="web-line bottom-left">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+
   <div class="compteur-boite" id="boite">
 
-  <div class="compteur-icone" id="icone">
-    <span class="icone-fallback">🕸️</span>
-  </div>
-
-  <div class="compteur-texte">
-
-    <div class="compteur-label">
-      Morts
+    <!-- LOGO -->
+    <div class="compteur-icone" id="icone">
+      <span class="icone-fallback">🕸️</span>
     </div>
 
-    <div class="compteur-chiffre" id="chiffre">
-      0
+
+    <!-- TEXTE -->
+    <div class="compteur-texte">
+
+      <div class="compteur-label">
+        Morts
+      </div>
+
+      <div class="compteur-chiffre" id="chiffre">
+        0
+      </div>
+
     </div>
 
-  </div>
 
-  <!-- Explosion POW blanche au clic -->
-  <div class="pow-pop" id="powPop">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="50,2 61,30 90,20 68,42 98,50 68,58 90,80 61,70 50,98 39,70 10,80 32,58 2,50 32,42 10,20 39,30"
-        fill="#F5F5F0" stroke="#111" stroke-width="3"/>
-    </svg>
-  </div>
+    <!-- Explosion POW -->
+    <div class="pow-pop" id="powPop">
+
+      <svg
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg">
+
+        <polygon
+          points="
+          50,2
+          61,30
+          90,20
+          68,42
+          98,50
+          68,58
+          90,80
+          61,70
+          50,98
+          39,70
+          10,80
+          32,58
+          2,50
+          32,42
+          10,20
+          39,30"
+          fill="#F5F5F0"
+          stroke="#111"
+          stroke-width="3"
+        />
+
+      </svg>
+
+    </div>
 
   </div>
 
@@ -256,100 +700,203 @@ html, body {
 /* ============================================
    FALLBACK IMAGE LOGO
 ============================================ */
+
 const icone = document.getElementById('icone');
+
 const testImg = new Image();
-testImg.onerror = () => icone.classList.add('image-manquante');
+
+testImg.onerror = () => {
+  icone.classList.add('image-manquante');
+};
+
 testImg.src = 'image_9cd85a.png';
 
 
 /* ============================================
    ETAT + PERSISTANCE
 ============================================ */
-const chiffreEl = document.getElementById('chiffre');
-const boiteEl = document.getElementById('boite');
-const STOCKAGE_KEY = 'compteurMorts';
+
+const chiffreEl =
+  document.getElementById('chiffre');
+
+const boiteEl =
+  document.getElementById('boite');
+
+const STOCKAGE_KEY =
+  'compteurMorts';
 
 let compte = 0;
 
 try {
-  compte = parseInt(localStorage.getItem(STOCKAGE_KEY)) || 0;
+
+  compte =
+    parseInt(
+      localStorage.getItem(STOCKAGE_KEY)
+    ) || 0;
+
 } catch (e) {
-  // localStorage indisponible (ex: certains navigateurs sources OBS) -> on reste en mémoire
-  console.warn('localStorage indisponible, le compteur ne persistera pas entre les sessions.');
+
+  console.warn(
+    'localStorage indisponible.'
+  );
+
 }
 
 chiffreEl.textContent = compte;
 
 
+/* ============================================
+   SAUVEGARDE
+============================================ */
+
 function sauvegarder() {
+
   try {
-    localStorage.setItem(STOCKAGE_KEY, compte);
+
+    localStorage.setItem(
+      STOCKAGE_KEY,
+      compte
+    );
+
   } catch (e) {
-    // silencieux : on continue en mémoire seulement
+
+    // On continue en mémoire.
+
   }
+
   chiffreEl.textContent = compte;
 
   chiffreEl.classList.remove('pop');
-  void chiffreEl.offsetWidth; // force le reflow pour rejouer l'animation
+
+  void chiffreEl.offsetWidth;
+
   chiffreEl.classList.add('pop');
 }
 
+
+/* ============================================
+   FLASH
+============================================ */
+
 function flash(classe) {
-  boiteEl.classList.remove('flash-plus', 'flash-moins');
+
+  boiteEl.classList.remove(
+    'flash-plus',
+    'flash-moins'
+  );
+
   boiteEl.classList.add(classe);
-  setTimeout(() => boiteEl.classList.remove(classe), 200);
+
+  setTimeout(() => {
+
+    boiteEl.classList.remove(classe);
+
+  }, 200);
 }
 
-const powEl = document.getElementById('powPop');
+
+/* ============================================
+   POW
+============================================ */
+
+const powEl =
+  document.getElementById('powPop');
 
 function jouerPow() {
+
   powEl.classList.remove('jouer');
-  void powEl.offsetWidth; // force le reflow pour rejouer l'animation
+
+  void powEl.offsetWidth;
+
   powEl.classList.add('jouer');
 }
 
+
+/* ============================================
+   +1
+============================================ */
+
 function incrementer() {
+
   compte++;
+
   sauvegarder();
+
   flash('flash-plus');
+
   jouerPow();
 }
 
+
+/* ============================================
+   -1
+============================================ */
+
 function decrementer() {
+
   if (compte > 0) {
     compte--;
   }
+
   sauvegarder();
+
   flash('flash-moins');
 }
 
+
+/* ============================================
+   RESET
+============================================ */
+
 function reset() {
+
   compte = 0;
+
   sauvegarder();
 }
 
 
 /* ============================================
-   RESET SECURISE : maintenir "R" 1 seconde
+   RESET SECURISE
+   R pendant 1 seconde
 ============================================ */
+
 let resetTimer = null;
 
 function demarrerReset() {
+
   if (resetTimer) return;
-  boiteEl.classList.add('reset-pending');
+
+  boiteEl.classList.add(
+    'reset-pending'
+  );
+
   resetTimer = setTimeout(() => {
+
     reset();
-    boiteEl.classList.remove('reset-pending');
+
+    boiteEl.classList.remove(
+      'reset-pending'
+    );
+
     resetTimer = null;
+
   }, 1000);
 }
 
+
 function annulerReset() {
+
   if (resetTimer) {
+
     clearTimeout(resetTimer);
+
     resetTimer = null;
   }
-  boiteEl.classList.remove('reset-pending');
+
+  boiteEl.classList.remove(
+    'reset-pending'
+  );
 }
 
 
@@ -357,38 +904,66 @@ function annulerReset() {
    RACCOURCIS CLAVIER
 ============================================ */
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowUp') {
-    incrementer();
-  }
+document.addEventListener(
+  'keydown',
+  (e) => {
 
-  if (e.key === 'ArrowDown') {
-    decrementer();
-  }
+    if (e.key === 'ArrowUp') {
+      incrementer();
+    }
 
-  if (e.key.toLowerCase() === 'r' && !e.repeat) {
-    demarrerReset();
-  }
-});
+    if (e.key === 'ArrowDown') {
+      decrementer();
+    }
 
-document.addEventListener('keyup', (e) => {
-  if (e.key.toLowerCase() === 'r') {
-    annulerReset();
+    if (
+      e.key.toLowerCase() === 'r'
+      && !e.repeat
+    ) {
+      demarrerReset();
+    }
+
   }
-});
+);
+
+
+document.addEventListener(
+  'keyup',
+  (e) => {
+
+    if (
+      e.key.toLowerCase() === 'r'
+    ) {
+      annulerReset();
+    }
+
+  }
+);
 
 
 /* ============================================
    SOURIS
 ============================================ */
 
-boiteEl.addEventListener('click', incrementer);
+boiteEl.addEventListener(
+  'click',
+  incrementer
+);
 
-boiteEl.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-  decrementer();
-});
+
+boiteEl.addEventListener(
+  'contextmenu',
+  (e) => {
+
+    e.preventDefault();
+
+    decrementer();
+
+  }
+);
+
 </script>
 
 </body>
 </html>
+```
