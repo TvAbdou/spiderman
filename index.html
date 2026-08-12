@@ -19,7 +19,7 @@ html, body {
 .compteur-fil-wrap {
   position: relative;
   display: inline-block;
-  padding: 10px; /* Espace pour le contour lumineux */
+  padding: 10px;
 }
 
 /* ============================================
@@ -49,17 +49,14 @@ html, body {
       #8f1414 100%
     );
 
-  /* BORDURE ET OUTLINE BLEU VIF */
-  border: 3.5px solid #00d2ff;
-  outline: 2.5px solid #0044ff;
+  /* BORDURE BLEU FONCÉ NORMALE (pas lumineuse) */
+  border: 3.5px solid #0a1a4d;
+  outline: 2.5px solid #0a1a4d;
   border-radius: 12px;
 
-  /* OMBRE ET GLOW BLEU SPIDER-MAN */
-  box-shadow:
-    0 0 12px rgba(0, 210, 255, 0.7),
-    3px 3px 0 rgba(0,0,0,0.8);
+  /* OMBRE SIMPLE, SANS GLOW */
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.8);
 
-  /* COMPTEUR DROIT */
   transform: rotate(0deg);
 
   user-select: none;
@@ -105,7 +102,7 @@ html, body {
   background-color: #F5F5F0;
 
   border-radius: 50%;
-  border: 2.5px solid #00d2ff;
+  border: 2.5px solid #0a1a4d;
 
   box-sizing: border-box;
   flex-shrink: 0;
@@ -120,7 +117,7 @@ html, body {
   font-size: 22px;
   color: #C41E1E;
 
-  box-shadow: 0 0 6px rgba(0, 210, 255, 0.6), 1px 1px 0 rgba(0,0,0,0.4);
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.4);
 }
 
 .compteur-icone .icone-fallback {
@@ -180,7 +177,7 @@ html, body {
 
   -webkit-text-stroke: 1.2px #111;
 
-  text-shadow: 2px 2px 0 #0044ff, 0 0 8px #00d2ff;
+  text-shadow: 2px 2px 0 #0a1a4d;
 
   display: inline-block;
 
@@ -197,8 +194,7 @@ html, body {
 
 .compteur-boite.flash-plus {
   box-shadow:
-    0 0 0 3px #00d2ff,
-    0 0 22px 6px rgba(0,210,255,0.9),
+    0 0 0 3px #0a1a4d,
     3px 3px 0 rgba(0,0,0,0.5);
 }
 
@@ -208,8 +204,7 @@ html, body {
 
 .compteur-boite.flash-moins {
   box-shadow:
-    0 0 0 3px #0044ff,
-    0 0 18px 4px rgba(0,68,255,0.8),
+    0 0 0 3px #142a6b,
     3px 3px 0 rgba(0,0,0,0.5);
 }
 
@@ -220,7 +215,6 @@ html, body {
 .compteur-boite.reset-pending {
   box-shadow:
     0 0 0 3px #f1c40f,
-    0 0 20px 6px rgba(241,196,15,0.8),
     3px 3px 0 rgba(0,0,0,0.5);
 }
 
